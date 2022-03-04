@@ -6,17 +6,20 @@ Social Network Analysis for Research Trends
 ## Files
 | Category | Filename | Descriptions |
 |---|---|---|
-| Authors 	 	| splitAuthors.php | main process|
-|				| mySplitAuthorLib.php| functions|
-|				| splitAuthors_run.bat |batch run|
-|				| Authors.txt | (example input)|
-| Title 	 	| sna.py | main process|
-|				| VocabDict.py | data class|
-|				| sna_run.bat |batch run|
-|				| userDict.txt | user dictionary|
-|				| userStopWords.txt | user stopwords|
-|				| Titles.txt | (example input)|
-| etc				| deleteOutputs.bat | |
+| [Authors](#authors)  	| splitAuthors.php 		| main process		|
+|						| mySplitAuthorLib.php	| functions			|
+|						| splitAuthors_run.bat 	| batch run			|
+|						| Authors.txt 			| (example input)	|
+| [Titles](#titles)  	| sna.py 				| main process		|
+|						| VocabDict.py 			| data class		|
+|						| sna_run.bat 			| batch run			|
+|						| userDict.txt 			| user dictionary	|
+|						| userStopWords.txt 	| user stopwords	|
+|						| Titles.txt 			| (example input)	|
+| [EdgeList](#edge-list)| myNetworkAnalysis.py 	| main process		|
+|						| myNetworkAnalysis_run.bat | batch run		|
+|						| EdgeTest.txt 			| (example input)	|
+| etc					| deleteOutputs.bat 	| 					|
 
 ## Authors
 발표논문의 저자목록 형식을 표준화한다.
@@ -24,7 +27,6 @@ Social Network Analysis for Research Trends
 * 모든 저자들에 소속을 표시 - 저자목록을 뒤에서 부터 읽어와서, 소속이 없는 저자는 뒷 저자의 소속과 동일하도록 지정한다
 * 저자명, 저자의 소속을 표준화 - 다양하게 표현된 명칭을 하나로 통일한다
 * 교신 저자임을 표시
-
 
 ### input format (Authors.txt : default input filename)
 ```
@@ -154,3 +156,103 @@ lnl|name|afilliation|isCorresponding
 ```
 단어1, 단어2, 단어1의 빈도수, 단어2의 빈도수, 점수    
 점수 = 동시발생 회수 / (단어1 빈도수 * 단어2 빈도수) * 1000
+
+
+## Edge list
+Node, Edge 등을 SNA 분석을 위한 형식으로 변환한다.(tgf, csv)    
+tgf : [trivial graph format](https://en.wikipedia.org/wiki/Trivial_Graph_Format)    
+tgf 파일을 yED 의 입력으로, csv 파일은 gephi 의 입력으로 사용한다.
+
+* read input str
+* get pair
+* get node list
+* get adjacency matrix
+* get AutoList(x)
+* get Autolist(y)
+
+
+### input format (EdgeTest.txt)
+```
+1|a,b,c
+2|a,b,d
+3|b,c,d,e
+```
+
+### output format1 (0_Edges.tgf)
+```
+#
+1 a
+1 b
+1 c
+2 a
+2 b
+2 d
+3 b
+3 c
+3 d
+3 e
+```
+
+### output format2 (0_Edges_A.tgf, 1_Edges_A.csv)
+```
+#
+1 2 2
+1 3 2
+2 1 2
+2 3 2
+3 1 2
+3 2 2
+```
+```
+source, target, weight
+1, 2, 2
+1, 3, 2
+2, 1, 2
+2, 3, 2
+3, 1, 2
+3, 2, 2
+```
+
+### output format3 (0_Edges_B.tgf, 1_Edges_B.csv)
+```
+#
+a b 2
+a c 1
+a d 1
+b a 2
+b c 2
+b d 2
+b e 1
+c a 1
+c b 2
+c d 1
+c e 1
+d a 1
+d b 2
+d c 1
+d e 1
+e b 1
+e c 1
+e d 1
+```
+```
+source, target, weight
+a, b, 2
+a, c, 1
+a, d, 1
+b, a, 2
+b, c, 2
+b, d, 2
+b, e, 1
+c, a, 1
+c, b, 2
+c, d, 1
+c, e, 1
+d, a, 1
+d, b, 2
+d, c, 1
+d, e, 1
+e, b, 1
+e, c, 1
+e, d, 1
+```
