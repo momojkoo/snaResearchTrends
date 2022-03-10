@@ -17,7 +17,8 @@ sWords = [] #selected words
 vThreshold = 10
 
 filename = "Titles.txt"
-outCheckFilename = "morphemeOut.txt" # outfile for check
+outCheckFilename = "checkOut.txt" # outfile for check
+outMorphemeFilename = "morphemeOut.txt" # outfile for morpheme
 outFreqAllFilename = "frequencyOut.txt" # outfile for freq
 outfile2Filename = "cofrequencyOut.txt" # outfile for co-freq
 
@@ -36,6 +37,8 @@ tokenTagList = {"NNG", "NNP", "NP", "SL"}
 
 # read file and tokenize
 ofp = open(outCheckFilename, "w", encoding='utf-8')
+ofmp = open(outMorphemeFilename, "w", encoding='utf-8')
+lineNo = 1
 for line in open(filename, encoding='utf-8'):
     ofp.write("============================\n")
     ofp.write(line)
@@ -46,7 +49,10 @@ for line in open(filename, encoding='utf-8'):
             if (t.form).lower() not in userStopWords:
                 sTokens.append((t.form).lower())
     ofp.write(">> " + ", ".join(sTokens) + "\n")
+    ofmp.write(str(lineNo) + "|" + ", ".join(sTokens) + "\n")
     sWords.append(sTokens)
+    lineNo += 1
+ofmp.close()
 ofp.close()
 
 # count frequency
@@ -96,6 +102,6 @@ for i in range(wl):
             ni = wCountAll[vDict.getId(vDict2.getWord(i))]
             nj = wCountAll[vDict.getId(vDict2.getWord(j))]
             nij = count[i][j]
-            factor = nij / (ni * nj) * 1000 # 
+            factor = nij / (ni * nj) * 100 # 
             ofp2.write(vDict2.getWord(i) + "|" + vDict2.getWord(j) + "|" + str(ni) + "|" +  str(nj)  + "|" +  str(nij) + "|" + "%.6f"%factor +"\n")
 ofp2.close()
